@@ -1,10 +1,13 @@
 package hee.aws.iam;
 
 import hee.aws.iam.dto.IAMUserKey;
+import hee.aws.iam.dto.IAMUserKeyWithRole;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -77,7 +80,143 @@ public class AssumeRoleController {
     }
 
 
-    @PostMapping("/describe")
+    @PostMapping("/describe/vpcs/with-role")
+    public ResponseEntity<?> callApi(@RequestBody IAMUserKeyWithRole info) throws Exception {
+        String[] credentials = assumeRole(info);
+        String accessKeyId = credentials[0];
+        String secretAccessKey = credentials[1];
+        String sessionToken = credentials[2];
+
+        describeVpcs(accessKeyId, secretAccessKey, sessionToken, info.getProxyEndpoint());
+        return ResponseEntity.ok().build();
+    }
+
+    private  String[] assumeRole(IAMUserKeyWithRole info) throws Exception {
+        String amzDate = getAmzDate();
+        String dateStamp = getDateStamp();
+
+         String SECRET_KEY = info.getSecretKey();
+         String ACCESS_KEY = info.getAccessKey();
+         String ROLE_ARN = info.getRoleArn();
+         String SESSION_NAME = "heeye-session";
+        String REGION = "ap-northeast-2";
+         String SERVICE = "sts";
+         String HOST = "sts.ap-northeast-2.amazonaws.com";
+//        String ENDPOINT = info.getProxyEndpoint();
+        String ENDPOINT = "https://" + HOST;
+        String method = "POST";
+        String canonicalUri = "/";
+        String canonicalQueryString = "";
+        String canonicalHeaders = "host:" + HOST + "\n" + "x-amz-date:" + amzDate + "\n";
+        String signedHeaders = "host;x-amz-date";
+        String payload = "Action=AssumeRole&Version=2011-06-15&RoleArn=" + ROLE_ARN + "&RoleSessionName=" + SESSION_NAME;
+        String payloadHash = sha256Hex(payload);
+        String canonicalRequest = method + '\n' +
+            canonicalUri + '\n' +
+            canonicalQueryString + '\n' +
+            canonicalHeaders + '\n' +
+            signedHeaders + '\n' +
+            payloadHash;
+
+        String algorithm = "AWS4-HMAC-SHA256";
+        String credentialScope = dateStamp + '/' + REGION + '/' + SERVICE + '/' + "aws4_request";
+        String stringToSign = algorithm + '\n' +
+            amzDate + '\n' +
+            credentialScope + '\n' +
+            sha256Hex(canonicalRequest);
+
+        byte[] signingKey = getSignatureKey(SECRET_KEY, dateStamp, REGION, SERVICE);
+        String signature = Hex.encodeHexString(hmacSHA256(stringToSign, signingKey));
+
+        String authorizationHeader = algorithm + ' ' +
+            "Credential=" + ACCESS_KEY + '/' + credentialScope + ", " +
+            "SignedHeaders=" + signedHeaders + ", " +
+            "Signature=" + signature;
+
+        HttpPost httpPost = new HttpPost(ENDPOINT);
+        if(ENDPOINT.endsWith("18443")) {
+            httpPost.setHeader("x-cmp-url", "sts");
+        }
+        httpPost.setHeader("x-amz-date", amzDate);
+        httpPost.setHeader("Authorization", authorizationHeader);
+        httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+        httpPost.setEntity(new StringEntity(payload));
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(httpPost)) {
+            String responseBody = EntityUtils.toString(response.getEntity());
+            System.out.println("AssumeRole Response Body: " + responseBody);
+            // Extract credentials from responseBody
+            // (use a proper XML parser in real code)
+            String accessKeyId = extractXmlValue(responseBody, "<AccessKeyId>", "</AccessKeyId>");
+            String secretAccessKey = extractXmlValue(responseBody, "<SecretAccessKey>", "</SecretAccessKey>");
+            String sessionToken = extractXmlValue(responseBody, "<SessionToken>", "</SessionToken>");
+            return new String[]{accessKeyId, secretAccessKey, sessionToken};
+        }
+    }
+
+    private  void describeVpcs(String accessKeyId, String secretAccessKey, String sessionToken, String proxyEndpoint) throws Exception {
+        String amzDate = getAmzDate();
+        String dateStamp = getDateStamp();
+        String region = "ap-northeast-2";
+        String service = "ec2";
+        String host = "ec2." + region + ".amazonaws.com";
+        String endpoint = proxyEndpoint;// "https://" + host;
+
+        String method = "POST";
+        String canonicalUri = "/";
+        String canonicalQueryString = "";
+        String canonicalHeaders = "host:" + host + "\n" + "x-amz-date:" + amzDate + "\n" + "x-amz-security-token:" + sessionToken + "\n";
+        String signedHeaders = "host;x-amz-date;x-amz-security-token";
+        String payload = "Action=DescribeVpcs&Version=2016-11-15";
+        String payloadHash = sha256Hex(payload);
+        String canonicalRequest = method + '\n' +
+            canonicalUri + '\n' +
+            canonicalQueryString + '\n' +
+            canonicalHeaders + '\n' +
+            signedHeaders + '\n' +
+            payloadHash;
+
+        String algorithm = "AWS4-HMAC-SHA256";
+        String credentialScope = dateStamp + '/' + region + '/' + service + '/' + "aws4_request";
+        String stringToSign = algorithm + '\n' +
+            amzDate + '\n' +
+            credentialScope + '\n' +
+            sha256Hex(canonicalRequest);
+
+        byte[] signingKey = getSignatureKey(secretAccessKey, dateStamp, region, service);
+        String signature = Hex.encodeHexString(hmacSHA256(stringToSign, signingKey));
+
+        String authorizationHeader = algorithm + ' ' +
+            "Credential=" + accessKeyId + '/' + credentialScope + ", " +
+            "SignedHeaders=" + signedHeaders + ", " +
+            "Signature=" + signature;
+
+        HttpPost httpPost = new HttpPost(endpoint);
+        if(endpoint.endsWith("18443")) {
+            httpPost.setHeader("x-cmp-url", "ec2");
+        }
+        httpPost.setHeader("x-amz-date", amzDate);
+        httpPost.setHeader("x-amz-security-token", sessionToken);
+        httpPost.setHeader("Authorization", authorizationHeader);
+        httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+        httpPost.setEntity(new StringEntity(payload));
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = httpClient.execute(httpPost)) {
+            System.out.println("DescribeVpcs Response Code: " + response.getStatusLine().getStatusCode());
+            String responseBody = EntityUtils.toString(response.getEntity());
+            System.out.println("DescribeVpcs Response Body: " + responseBody);
+        }
+    }
+
+    private String extractXmlValue(String xml, String startTag, String endTag) {
+        int startIndex = xml.indexOf(startTag) + startTag.length();
+        int endIndex = xml.indexOf(endTag);
+        return xml.substring(startIndex, endIndex);
+    }
+
+        @PostMapping("/describe/vpcs")
     public ResponseEntity<?> callApi(@RequestBody IAMUserKey userKey) throws Exception {
 
         String AWS_ACCESS_KEY = userKey.getAccessKey();
@@ -85,8 +224,11 @@ public class AssumeRoleController {
 
         String REGION = "ap-northeast-2";
         String SERVICE = "ec2";
-        String HOST = "ec2." + REGION + ".amazonaws.com";
-        String ENDPOINT = "https://" + HOST;
+
+        String HOST = "ec2.ap-northeast-2.amazonaws.com";
+        String ENDPOINT = userKey.getProxyEndpoint();
+//        String HOST = "ec2." + REGION + ".amazonaws.com";
+//        String ENDPOINT = "https://" + HOST;
 
         String amzDate = getAmzDate();
         String dateStamp = getDateStamp();
@@ -127,6 +269,10 @@ public class AssumeRoleController {
         // Send the HTTP request
         URI uri = new URI(ENDPOINT + "?" + canonicalQueryString);
         HttpGet httpGet = new HttpGet(uri);
+        if(ENDPOINT.endsWith("18443")) {
+            log.info("!!!!!!!!!!! set x-cml-url");
+            httpGet.setHeader("x-cmp-url", "ec2");
+        }
         httpGet.setHeader("x-amz-date", amzDate);
         httpGet.setHeader("Authorization", authorizationHeader);
 
