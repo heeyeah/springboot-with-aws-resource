@@ -36,7 +36,7 @@ public class MskConfiguration {
         configProps.put(AdminClientConfig.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
         configProps.put(SaslConfigs.SASL_MECHANISM, "AWS_MSK_IAM");
         //awsProfileName 으로 계정명 명시
-        configProps.put(SaslConfigs.SASL_JAAS_CONFIG, "software.amazon.msk.auth.iam.IAMLoginModule required awsProfileName=\"test-user\";");
+        configProps.put(SaslConfigs.SASL_JAAS_CONFIG, "software.amazon.msk.auth.iam.IAMLoginModule required awsProfileName=\"xxx-user\";");
         configProps.put(SaslConfigs.SASL_CLIENT_CALLBACK_HANDLER_CLASS, "software.amazon.msk.auth.iam.IAMClientCallbackHandler");
 
         return new DefaultKafkaProducerFactory<>(configProps);
