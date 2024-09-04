@@ -55,7 +55,7 @@ public class DataSourceConfig {
         String password = secretJson.get("password").asText();
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.amazon.opendistroforelasticsearch.jdbc.Driver");
+        dataSource.setDriverClassName("org.opensearch.jdbc.Driver");
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
