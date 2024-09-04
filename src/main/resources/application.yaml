@@ -2,7 +2,7 @@ kafka:
   bootstrapAddress: "b-2.testcluster.9avasc.c4.kafka.ap-northeast-2.amazonaws.com:9098,b-3.testcluster.9avasc.c4.kafka.ap-northeast-2.amazonaws.com:9098,b-1.testcluster.9avasc.c4.kafka.ap-northeast-2.amazonaws.com:9098"
 spring:
   config:
-    import: 'aws-secretsmanager:heeye'
+    import: 'aws/secretsmanager:heeye'
   datasource:
     driver-class-name: org.opensearch.jdbc.Driver
     url: ${jdbcUrl}
