@@ -1,4 +1,4 @@
-package hee.aws;
+package hee.aws.opensearch;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class CommonController {
+public class OpenSearchConnectController {
 
-    private final static Logger log = LoggerFactory.getLogger(CommonController.class);
+    private final static Logger log = LoggerFactory.getLogger(OpenSearchConnectController.class);
 
     private final JdbcTemplate jdbcTemplate;
 
