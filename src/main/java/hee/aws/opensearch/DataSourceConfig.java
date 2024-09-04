@@ -38,7 +38,7 @@ public class DataSourceConfig {
         GetSecretValueResponse getSecretValueResponse = secretsClient.getSecretValue(getSecretValueRequest);
         String result = getSecretValueResponse.secretString();
 
-        log.info("result : {}", result);
+        log.info("initial source info!========================================================================================\n : {}\n===========================================================================================", result);
 
         return result;
     }
