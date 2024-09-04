@@ -95,17 +95,17 @@
 
         <!-- JDBC Driver for OpenSearch -->
 
-<!--        <dependency>-->
-<!--            <groupId>org.opensearch.driver</groupId>-->
-<!--            <artifactId>opensearch-sql-jdbc</artifactId>-->
-<!--            <version>1.4.0.1</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.opensearch.driver</groupId>
+            <artifactId>opensearch-sql-jdbc</artifactId>
+            <version>1.4.0.1</version>
+        </dependency>
 
 <!--        &lt;!&ndash; Spring Boot Starter for JDBC &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-jdbc</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
