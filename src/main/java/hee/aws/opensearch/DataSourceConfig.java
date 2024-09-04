@@ -9,12 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @RequiredArgsConstructor
@@ -55,10 +57,17 @@ public class DataSourceConfig {
         String password = secretJson.get("password").asText();
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        Properties prop = new Properties();
+
+        prop.put("auth", "AWS_SIGV4");
+        prop.put("awsCredentialsProvider", EnvironmentVariableCredentialsProvider.create());
+
         dataSource.setDriverClassName("org.opensearch.jdbc.Driver");
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
+        dataSource.setConnectionProperties(prop);
+
         return dataSource;
     }
 }
