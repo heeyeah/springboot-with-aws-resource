@@ -57,14 +57,17 @@ public class DataSourceConfig {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         Properties prop = new Properties();
-        prop.setProperty("user", username);
-        prop.setProperty("password", password);
+        prop.put("user", username);
+        prop.put("password", password);
 //        prop.setProperty("ssl", "true");
-        prop.setProperty("auth", "NONE");
+        prop.put("auth", "BASIC");
+        prop.put("useSSL", "true");
 
-//        prop.put("auth", "NONE");
+        prop.put("trustSelfSigned", "true");
+
+//        prop.put("auth", "BASIC");
 //        prop.put("auth", "AWS_SIGV4");
-        prop.put("tunnelHost", "https://vpc-yr-vtr-kk66ndzelsd5nyucwx7h2dvkoi.ap-northeast-2.es.amazonaws.com");
+//        prop.put("tunnelHost", "https://vpc-yr-vtr-kk66ndzelsd5nyucwx7h2dvkoi.ap-northeast-2.es.amazonaws.com");
 //        prop.put("awsCredentialsProvider", EnvironmentVariableCredentialsProvider.create());
 //        prop.put("hostnameVerification", "false");
 //        prop.put("user", username);
@@ -72,8 +75,8 @@ public class DataSourceConfig {
 
         dataSource.setDriverClassName("org.opensearch.jdbc.Driver");
         dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+//        dataSource.setUsername(username);
+//        dataSource.setPassword(password);
         dataSource.setConnectionProperties(prop);
 
         return dataSource;
