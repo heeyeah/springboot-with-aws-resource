@@ -30,9 +30,8 @@ public class OpenSearchConnectController {
             result = jdbcTemplate.queryForList(request.getQuery());
 
             for(val data : result) {
-                data.keySet().forEach(key -> {
-                    log.info("{}", data.get(key).toString());
-                });
+                    log.info("[{}]",data);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
