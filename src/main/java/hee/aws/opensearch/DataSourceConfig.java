@@ -64,8 +64,8 @@ public class DataSourceConfig {
 
         dataSource.setDriverClassName("org.opensearch.jdbc.Driver");
         dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+//        dataSource.setUsername(username);
+//        dataSource.setPassword(password);
         dataSource.setConnectionProperties(prop);
 
         return dataSource;
