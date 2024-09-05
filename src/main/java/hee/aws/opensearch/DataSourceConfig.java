@@ -63,11 +63,13 @@ public class DataSourceConfig {
         prop.put("tunnelHost", "https://vpc-yr-vtr-kk66ndzelsd5nyucwx7h2dvkoi.ap-northeast-2.es.amazonaws.com");
 //        prop.put("awsCredentialsProvider", EnvironmentVariableCredentialsProvider.create());
         prop.put("hostnameVerification", false);
-        
+        prop.put("user", username);
+        prop.put("password", password);
+
         dataSource.setDriverClassName("org.opensearch.jdbc.Driver");
         dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+//        dataSource.setUsername(username);
+//        dataSource.setPassword(password);
         dataSource.setConnectionProperties(prop);
 
         return dataSource;
