@@ -1,38 +1,43 @@
 package hee.aws.opensearch;
 
+import hee.aws.opensearch.dto.QueryRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 public class OpenSearchConnectController {
 
     private final static Logger log = LoggerFactory.getLogger(OpenSearchConnectController.class);
-
-//    private final OpenSearchConnectService openSearchConnectService;
     private final JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/opensearch")
-    public ResponseEntity<?> queryInOpenSearch(@RequestParam String message) {
+    @PostMapping("/opensearch")
+    public ResponseEntity<?> queryInOpenSearch(@RequestBody QueryRequest request) {
 
+        log.info("query={}", request.getQuery());
+        List<Map<String, Object>> result = List.of();
         try {
-            String query = "SELECT FlightNum, OriginCityName, DestCityName FROM opensearch_dashboards_sample_data_flights LIMIT 1";
+            result = jdbcTemplate.queryForList(request.getQuery());
 
-            String result = jdbcTemplate.queryForList(query).toString();
-            log.info("result={}", result);
+            for(val data : result) {
+                data.keySet().forEach(key -> {
+                    log.info("{}", data.get(key).toString());
+                });
+            }
         } catch (Exception e) {
-            log.error("@@@@@@@@@@@@ {}", e.getMessage());
             e.printStackTrace();
         }
 
-
-        return ResponseEntity.ok().build();
-
+        return ResponseEntity.ok(result);
     }
 }
