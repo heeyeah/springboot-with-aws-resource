@@ -22,7 +22,8 @@ public class OpenSearchConnectController {
     public ResponseEntity<?> queryInOpenSearch(@RequestParam String message) {
 
         try {
-            String query = "SELECT * FROM opensearch_dashboards_sample_data_flights LIMIT 1";
+            String query = "SELECT FlightNum, OriginCityName, DestCityName FROM opensearch_dashboards_sample_data_flights LIMIT 1";
+
             String result = jdbcTemplate.queryForList(query).toString();
             log.info("result={}", result);
         } catch (Exception e) {
