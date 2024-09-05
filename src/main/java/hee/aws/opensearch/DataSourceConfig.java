@@ -1,7 +1,6 @@
 package hee.aws.opensearch;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -46,14 +45,14 @@ public class DataSourceConfig {
 
     @Bean
     public DataSource dataSource() throws JsonProcessingException {
-        String secretData = getSecret("heeye");
+//        String secretData = getSecret("heeye");
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode secretJson = objectMapper.readTree(secretData);
+//        JsonNode secretJson = objectMapper.readTree(secretData);
 
-        String url = secretJson.get("jdbcUrl").asText();
-        String username = secretJson.get("username").asText();
-        String password = secretJson.get("password").asText();
+        String url = "jdbc:opensearch://https://vpc-yr-vtr-kk66ndzelsd5nyucwx7h2dvkoi.ap-northeast-2.es.amazonaws.com";//secretJson.get("jdbcUrl").asText();
+//        String username = secretJson.get("username").asText();
+//        String password = secretJson.get("password").asText();
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         Properties prop = new Properties();
