@@ -62,7 +62,7 @@ public class DataSourceConfig {
 //        prop.setProperty("ssl", "true");
 //        prop.setProperty("auth", "NONE");
 
-        prop.put("auth", "BASIC");
+        prop.put("auth", "NONE");
 //        prop.put("auth", "AWS_SIGV4");
         prop.put("tunnelHost", "https://vpc-yr-vtr-kk66ndzelsd5nyucwx7h2dvkoi.ap-northeast-2.es.amazonaws.com");
 //        prop.put("awsCredentialsProvider", EnvironmentVariableCredentialsProvider.create());
