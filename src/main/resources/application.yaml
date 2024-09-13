@@ -3,8 +3,8 @@ logging:
     root: debug
 opensearch:
   uris: https://vpc-yr-vtr-kk66ndzelsd5nyucwx7h2dvkoi.ap-northeast-2.es.amazonaws.com
-  username: ciqops
-  password: Shinhan@1
+#  username: ciqops
+#  password: Shinhan@1
 spring:
   jackson:
     serialization:

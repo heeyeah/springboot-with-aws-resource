@@ -30,7 +30,7 @@ public class AWSRequestSigningApacheInterceptor implements HttpRequestIntercepto
 
         log.info(" process !!!!!!!");
         log.info("request = {}", request);
-        
+
 //        ApacheHttpRequest sdkRequest = new ApacheHttpRequest(request);
 //        signer.sign(sdkRequest, credentialsProvider.resolveCredentials());
     }
