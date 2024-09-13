@@ -31,6 +31,37 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>auth</artifactId>
+            <version>2.26.27</version> <!-- 최신 버전을 확인하여 입력하세요 -->
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sts</artifactId>
+            <version>2.26.27</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>apache-client</artifactId>
+            <version>2.26.27</version>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>http-client-spi</artifactId>
+            <version>2.26.27</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>2.26.27</version>
+        </dependency>
+
+        <!-- spring data opensearch!!! -->
+        <dependency>
             <groupId>org.opensearch.client</groupId>
             <artifactId>spring-data-opensearch</artifactId>
             <version>1.5.2</version>

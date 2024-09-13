@@ -1,0 +1,13 @@
+logging:
+  level:
+    root: debug
+opensearch:
+  uris: https://vpc-yr-vtr-kk66ndzelsd5nyucwx7h2dvkoi.ap-northeast-2.es.amazonaws.com
+  username: ciqops
+  password: Shinhan@1
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  main:
+    allow-bean-definition-overriding: true
