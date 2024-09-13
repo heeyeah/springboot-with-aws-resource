@@ -21,6 +21,7 @@ public class OpenSearchConnectController {
     private final static Logger log = LoggerFactory.getLogger(OpenSearchConnectController.class);
     private final JdbcTemplate jdbcTemplate;
 
+
     @PostMapping("/opensearch")
     public ResponseEntity<?> queryInOpenSearch(@RequestBody QueryRequest request) {
 
