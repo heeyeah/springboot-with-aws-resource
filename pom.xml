@@ -31,80 +31,26 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.awspring.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-aws-secrets-manager-config</artifactId>-->
-<!--            <version>2.4.4</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-bootstrap</artifactId>-->
-<!--            <version>4.1.4</version>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
+            <groupId>org.opensearch.client</groupId>
+            <artifactId>spring-data-opensearch</artifactId>
+            <version>1.5.2</version>
         </dependency>
         <dependency>
-            <groupId>software.amazon.msk</groupId>
-            <artifactId>aws-msk-iam-auth</artifactId>
-            <version>2.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>auth</artifactId>
-            <version>2.26.27</version> <!-- 최신 버전을 확인하여 입력하세요 -->
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>sts</artifactId>
-            <version>2.26.27</version>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>ec2</artifactId>
-            <version>2.26.27</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.13</version> <!-- 최신 버전으로 변경하세요 -->
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.15</version> <!-- 최신 버전으로 변경하세요 -->
+            <groupId>org.opensearch.client</groupId>
+            <artifactId>spring-data-opensearch-starter</artifactId>
+            <version>1.5.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.opensearch.client</groupId>
+                    <artifactId>opensearch-rest-high-level-client</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-        <!-- AWS SDK for Secrets Manager -->
         <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>secretsmanager</artifactId>
-            <version>2.26.27</version>
-        </dependency>
-
-        <!-- AWS SDK for OpenSearch -->
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>opensearch</artifactId>
-            <version>2.26.27</version>
-        </dependency>
-
-        <!-- JDBC Driver for OpenSearch -->
-
-        <dependency>
-            <groupId>org.opensearch.driver</groupId>
-            <artifactId>opensearch-sql-jdbc</artifactId>
-            <version>1.4.0.1</version>
-        </dependency>
-
-<!--        &lt;!&ndash; Spring Boot Starter for JDBC &ndash;&gt;-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <groupId>org.opensearch.client</groupId>
+            <artifactId>opensearch-java</artifactId>
+            <version>2.11.1</version>
         </dependency>
     </dependencies>
 
